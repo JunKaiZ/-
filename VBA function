@@ -1,0 +1,11 @@
+Function jyds(a As Range, b As Range, c As Range, d As String, e As String)
+Dim t As String
+
+For i = 1 To a.Rows.Count
+If a.Cells(i, 1) = d And c.Cells(i, 1) = e Then t = b.Cells(i, 1) & vbCrLf & t
+jyds = t
+
+Next
+
+End Function
+
