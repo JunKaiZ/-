@@ -1,0 +1,48 @@
+Sub 分类汇总()
+'
+' 分类汇总 宏
+'
+Excel.Application.ScreenUpdating = False
+'
+
+Dim num
+num = Sheets("到期").Range("B2").End(xlDown).Row
+    Sheets("到期").Select
+    Range("BB2").AutoFill Destination:=Range("BB2:BB" & num)
+
+Sheets("可用(记得删除PPN&CD)").Select
+num = Sheets("可用(记得删除PPN&CD)").Range("B2").End(xlDown).Row
+Sheets("CD").Range("3:" & num).Clear
+Sheets("PPN").Range("3:" & num).Clear
+Sheets("可用(记得删除PPN&CD)").Range("T2").AutoFill Destination:=Range("T2:T" & num)
+
+    
+Sheets("可用(记得删除PPN&CD)").Select
+Sheets("可用(记得删除PPN&CD)").Range("$A$1:$T$" & num).AutoFilter Field:=12, Criteria1:="<2", _
+        Operator:=xlFilterValues
+Range("A2:S2").Select
+Range(Selection, Selection.End(xlDown)).EntireRow.Delete
+Sheets("可用(记得删除PPN&CD)").Range("$A$1:$T$" & num).AutoFilter Field:=12
+    
+    
+    Sheets("可用(记得删除PPN&CD)").Range("$A$1:$T$" & num).AutoFilter Field:=5, Criteria1:="=*CD*", Operator:=xlFilterValues
+    Range("A2:S2").Select
+    Range(Selection, Selection.End(xlDown)).Copy Sheets("CD").Range("A2")
+    Application.CutCopyMode = False
+    Sheets("CD").Select
+    Range("T2").AutoFill Destination:=Range("T2:T" & num)
+    Sheets("可用(记得删除PPN&CD)").Select
+    Selection.EntireRow.Delete
+    Sheets("可用(记得删除PPN&CD)").Range("$A$1:$T$" & num).AutoFilter Field:=5, Criteria1:="=*PPN*", _
+        Operator:=xlFilterValues
+    Range("A2:S2").Select
+    Range(Selection, Selection.End(xlDown)).Copy Sheets("PPN").Range("A2")
+    Sheets("可用(记得删除PPN&CD)").Select
+    Application.CutCopyMode = False
+    Selection.EntireRow.Delete
+    Sheets("可用(记得删除PPN&CD)").Range("$A$1:$T$" & num).AutoFilter Field:=5
+    Sheets("头寸yyds (2)").Columns("C:I").Rows.AutoFit
+    Sheets("头寸yyds (2)").ResetAllPageBreaks
+
+Excel.Application.ScreenUpdating = True
+End Sub
